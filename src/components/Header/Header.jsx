@@ -2,30 +2,38 @@ import React, { useState } from 'react';
 import { Autocomplete } from '@react-google-maps/api';
 import { AppBar, Toolbar, Typography, InputBase, Box } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-
 import useStyles from './styles';
 
-const Header = ({ onLoad, onPlaceChanged }) => {
-
+export const Header = ({ setCoordinates }) => {
     const classes = useStyles();
-    const [autoComplete, setAutoComplete] = useState(null)
+    const [autocomplete, setAutoComplete] = useState(null);
+
+    const onLoad = (autoComplete) => setAutoComplete(autoComplete);
+
+    //Find New Lat and Lng of new location
+    const onPlaceChanged = () => {
+        const lat = autocomplete.getPlace().geometry.location.lat();
+        const lng = autocomplete.getPlace().geometry.location.lng();
+
+        setCoordinates({ lat, lng });
+    }
 
     return (
-        <AppBar position='static'>
+        <AppBar position="static">
             <Toolbar className={classes.toolbar}>
-                <Typography variant='h5' className={classes.title}>
-                    TravelFox
+                <Typography variant="h5" className={classes.title}>
+                    Wanderers  <i>Make Travelling Fun.</i>
                 </Typography>
-                <Box display='flex'>
-                    <Typography variant='h6' className={classes.title}>
-                        Explore new places
+                <Box display="flex">
+                    <Typography variant="h6" className={classes.title}>
+                        Explore New Places
                     </Typography>
-                    <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+                    <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}> 
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
                                 <SearchIcon />
                             </div>
-                            <InputBase placeholder='Search...' classes={{ root: classes.inputRoot, input: classes.inputInput }} />
+                            <InputBase placeholder="Search..." classes={{ root: classes.inputRoot, input: classes.inputInput }} />
                         </div>
                     </Autocomplete>
                 </Box>
@@ -33,5 +41,3 @@ const Header = ({ onLoad, onPlaceChanged }) => {
         </AppBar>
     );
 };
-
-export default Header;
