@@ -65,3 +65,5 @@ export const Map = ({ setCoordinates, setBounds, coordinates, places, setChildCl
         </div>
     );
 };
+
+export default Map;
